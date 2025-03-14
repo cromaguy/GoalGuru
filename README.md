@@ -5,6 +5,7 @@
   ![License](https://img.shields.io/badge/license-MIT-blue)
   ![Version](https://img.shields.io/badge/version-1.0.0-green)
   ![Status](https://img.shields.io/badge/status-active-brightgreen)
+  ![Made for](https://img.shields.io/badge/made%20for-KIIT%20University-orange)
   
   <img src="https://raw.githubusercontent.com/gist/patevs/b007a0e98fb216438d4cbf559fac4166/raw/88f20c9d749d756be63f22b09f3c4ac570bc5101/terminal.gif" alt="Demo" width="600" />
 
