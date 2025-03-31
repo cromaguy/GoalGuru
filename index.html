@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoalGuru 1.0</title>
+    <title>GoalGuru 2.0</title>
     <link rel="shortcut icon" href="https://event.kiit.ac.in/wp-content/uploads/2021/11/KIIT-Logo.png">
     <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
@@ -11,7 +11,7 @@
 <body>
     <div class="container">
         <header>
-            <h1>GoalGuru</h1>
+            <h1>GoalGuru <span style="font-size: 16px; opacity: 0.7; font-weight: 400; vertical-align: super;">2.0</span></h1>
             <div class="theme-toggle">
                 <span class="light-mode">☀️</span>
                 <label class="switch">
@@ -25,11 +25,11 @@
         <div class="task-stats">
             <div class="stat-box">
                 <span id="totalTasks">0</span>
-                <p>Total</p>
+                <p>Total Tasks</p>
             </div>
             <div class="stat-box">
                 <span id="completedTasks">0</span>
-                <p>Done</p>
+                <p>Completed</p>
             </div>
             <div class="stat-box">
                 <span id="pendingTasks">0</span>
@@ -39,11 +39,11 @@
 
         <div class="controls">
             <div class="todo-input">
-                <input type="text" id="taskInput" placeholder="Add a new task...">
+                <input type="text" id="taskInput" placeholder="What needs to be done?">
                 <select id="prioritySelect">
-                    <option value="normal">Normal</option>
-                    <option value="high">High</option>
-                    <option value="low">Low</option>
+                    <option value="normal">Normal Priority</option>
+                    <option value="high">High Priority</option>
+                    <option value="low">Low Priority</option>
                 </select>
                 <button id="addTaskBtn">Add Task</button>
             </div>
@@ -62,7 +62,7 @@
         <div class="task-container">
             <ul id="taskList"></ul>
             <div id="emptyState" class="empty-state">
-                <p>No tasks found. Add your first task!</p>
+                <p>No tasks found. Ready to be productive?</p>
             </div>
         </div>
         

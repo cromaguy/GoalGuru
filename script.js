@@ -58,12 +58,18 @@ function initApp() {
     
     // Check empty state
     checkEmptyState();
+
+    // Add focus to task input on load
+    taskInput.focus();
+    
+    // Add animation to statistics on page load
+    animateStatistics();
 }
 
 function addTask() {
     const taskText = taskInput.value.trim();
     if (taskText === "") {
-        alert("Please enter a task!");
+        showNotification("Please enter a task!");
         return;
     }
     
@@ -92,6 +98,9 @@ function addTask() {
     
     // Check empty state
     checkEmptyState();
+
+    // Show a success notification
+    showNotification("Task added successfully!", "success");
 }
 
 function appendTaskToDOM(task) {
@@ -125,11 +134,11 @@ function appendTaskToDOM(task) {
     
     // Set border color based on priority
     if (task.priority === "high") {
-        li.style.borderLeftColor = "#ff5252";
+        li.style.borderLeftColor = "#ef4444";
     } else if (task.priority === "low") {
-        li.style.borderLeftColor = "#4CAF50";
+        li.style.borderLeftColor = "#22c55e";
     } else {
-        li.style.borderLeftColor = "#4e6cff";
+        li.style.borderLeftColor = "#4f46e5";
     }
     
     // Add event listeners
@@ -150,6 +159,11 @@ function addTaskEventListeners(taskItem) {
         updateTaskInStorage(taskItem.dataset.id, { completed });
         updateTaskCounters();
         applyFilter();
+        
+        // Show notification
+        if (completed) {
+            showNotification("Task completed!", "success");
+        }
     });
     
     // Edit button event
@@ -159,111 +173,132 @@ function addTaskEventListeners(taskItem) {
         if (newTaskText !== null && newTaskText.trim() !== "") {
             taskItem.querySelector(".task-text").textContent = newTaskText;
             updateTaskInStorage(taskItem.dataset.id, { text: newTaskText });
+            showNotification("Task updated!", "success");
         }
     });
     
     // Delete button event
     taskItem.querySelector(".delete").addEventListener("click", () => {
         if (confirm("Are you sure you want to delete this task?")) {
+            deleteTask(taskItem.dataset.id);
             taskItem.remove();
-            removeTaskFromStorage(taskItem.dataset.id);
             updateTaskCounters();
             checkEmptyState();
+            showNotification("Task deleted!", "success");
         }
     });
 }
 
-// Save task to local storage
-function saveTask(task) {
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks.push(task);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-// Load tasks from local storage
 function loadTasks() {
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    let tasks = [];
+    try {
+        const storedTasks = localStorage.getItem("tasks");
+        if (storedTasks) {
+            tasks = JSON.parse(storedTasks);
+        }
+    } catch (error) {
+        console.error("Error loading tasks from localStorage:", error);
+        tasks = [];
+    }
+    
+    // Clear existing tasks
+    taskList.innerHTML = "";
+    
+    // Add tasks to DOM
     tasks.forEach(task => {
         appendTaskToDOM(task);
     });
-}
-
-// Update task in local storage
-function updateTaskInStorage(taskId, updates) {
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks = tasks.map(task => {
-        if (task.id == taskId) {
-            return { ...task, ...updates };
-        }
-        return task;
-    });
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-// Remove task from local storage
-function removeTaskFromStorage(taskId) {
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    tasks = tasks.filter(task => task.id != taskId);
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-}
-
-// Clear completed tasks
-function clearCompleted() {
-    const completedTasks = document.querySelectorAll("li.completed");
-    if (completedTasks.length === 0) return;
     
-    if (confirm("Are you sure you want to clear all completed tasks?")) {
-        completedTasks.forEach(task => {
-            removeTaskFromStorage(task.dataset.id);
-            task.remove();
-        });
-        updateTaskCounters();
-        checkEmptyState();
+    // Update counters
+    updateTaskCounters();
+    
+    // Check empty state
+    checkEmptyState();
+}
+
+function saveTask(task) {
+    let tasks = [];
+    try {
+        const storedTasks = localStorage.getItem("tasks");
+        if (storedTasks) {
+            tasks = JSON.parse(storedTasks);
+        }
+        tasks.push(task);
+        localStorage.setItem("tasks", JSON.stringify(tasks));
+    } catch (error) {
+        console.error("Error saving task to localStorage:", error);
+        showNotification("Failed to save task. Please try again.", "error");
     }
 }
 
-// Export tasks
-function exportTasks() {
-    const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-    if (tasks.length === 0) {
-        alert("No tasks to export!");
+function updateTaskInStorage(taskId, updates) {
+    let tasks = [];
+    try {
+        const storedTasks = localStorage.getItem("tasks");
+        if (storedTasks) {
+            tasks = JSON.parse(storedTasks);
+            const taskIndex = tasks.findIndex(task => task.id == taskId);
+            if (taskIndex !== -1) {
+                tasks[taskIndex] = { ...tasks[taskIndex], ...updates };
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+            }
+        }
+    } catch (error) {
+        console.error("Error updating task in localStorage:", error);
+        showNotification("Failed to update task. Please try again.", "error");
+    }
+}
+
+function deleteTask(taskId) {
+    let tasks = [];
+    try {
+        const storedTasks = localStorage.getItem("tasks");
+        if (storedTasks) {
+            tasks = JSON.parse(storedTasks);
+            const taskIndex = tasks.findIndex(task => task.id == taskId);
+            if (taskIndex !== -1) {
+                tasks.splice(taskIndex, 1);
+                localStorage.setItem("tasks", JSON.stringify(tasks));
+            }
+        }
+    } catch (error) {
+        console.error("Error deleting task from localStorage:", error);
+        showNotification("Failed to delete task. Please try again.", "error");
+    }
+}
+
+function clearCompleted() {
+    const completedTasks = document.querySelectorAll("li.completed");
+    if (completedTasks.length === 0) {
+        showNotification("No completed tasks to clear!", "warning");
         return;
     }
     
-    const taskText = tasks.map(task => 
-        `[${task.completed ? "✓" : " "}] ${task.text} (${task.priority})`
-    ).join("\n");
-    
-    const blob = new Blob([taskText], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "tasks.txt";
-    a.click();
-    
-    URL.revokeObjectURL(url);
+    if (confirm(`Are you sure you want to delete ${completedTasks.length} completed task(s)?`)) {
+        // Remove from DOM
+        completedTasks.forEach(task => {
+            deleteTask(task.dataset.id);
+            task.remove();
+        });
+        
+        // Update counters
+        updateTaskCounters();
+        
+        // Check empty state
+        checkEmptyState();
+        
+        showNotification("Completed tasks cleared!", "success");
+    }
 }
 
-// Filter tasks
 function filterTasks() {
-    const searchTerm = searchInput.value.toLowerCase();
-    const tasks = document.querySelectorAll("#taskList li");
+    const searchTerm = searchInput.value.toLowerCase().trim();
+    const taskItems = document.querySelectorAll("#taskList li");
     
-    tasks.forEach(task => {
+    taskItems.forEach(task => {
         const taskText = task.querySelector(".task-text").textContent.toLowerCase();
-        const matchesSearch = taskText.includes(searchTerm);
-        
-        // Check if task matches the current filter
-        let matchesFilter = true;
-        if (currentFilter === "active") {
-            matchesFilter = !task.classList.contains("completed");
-        } else if (currentFilter === "completed") {
-            matchesFilter = task.classList.contains("completed");
-        }
-        
-        if (matchesSearch && matchesFilter) {
-            task.style.display = "";
+        if (taskText.includes(searchTerm)) {
+            task.style.display = "block";
         } else {
             task.style.display = "none";
         }
@@ -272,12 +307,11 @@ function filterTasks() {
     checkEmptyState();
 }
 
-// Set filter
 function setFilter(filter) {
     currentFilter = filter;
     
-    // Update active button
-    [allTasksBtn, activeTasksBtn, completedTasksBtn].forEach(btn => {
+    // Update active filter button
+    document.querySelectorAll(".filter-btn").forEach(btn => {
         btn.classList.remove("active");
     });
     
@@ -292,24 +326,18 @@ function setFilter(filter) {
     applyFilter();
 }
 
-// Apply filter
 function applyFilter() {
-    const tasks = document.querySelectorAll("#taskList li");
-    const searchTerm = searchInput.value.toLowerCase();
+    const taskItems = document.querySelectorAll("#taskList li");
     
-    tasks.forEach(task => {
-        const taskText = task.querySelector(".task-text").textContent.toLowerCase();
-        const matchesSearch = taskText.includes(searchTerm);
+    taskItems.forEach(task => {
+        const isCompleted = task.classList.contains("completed");
         
-        let matchesFilter = true;
-        if (currentFilter === "active") {
-            matchesFilter = !task.classList.contains("completed");
-        } else if (currentFilter === "completed") {
-            matchesFilter = task.classList.contains("completed");
-        }
-        
-        if (matchesSearch && matchesFilter) {
-            task.style.display = "";
+        if (currentFilter === "all") {
+            task.style.display = "block";
+        } else if (currentFilter === "active" && !isCompleted) {
+            task.style.display = "block";
+        } else if (currentFilter === "completed" && isCompleted) {
+            task.style.display = "block";
         } else {
             task.style.display = "none";
         }
@@ -318,36 +346,208 @@ function applyFilter() {
     checkEmptyState();
 }
 
-// Update task counters
 function updateTaskCounters() {
-    const tasks = document.querySelectorAll("#taskList li");
-    const completedTasks = document.querySelectorAll("#taskList li.completed");
+    const totalTasks = document.querySelectorAll("#taskList li").length;
+    const completedTasks = document.querySelectorAll("#taskList li.completed").length;
+    const pendingTasks = totalTasks - completedTasks;
     
-    totalTasksCounter.textContent = tasks.length;
-    completedTasksCounter.textContent = completedTasks.length;
-    pendingTasksCounter.textContent = tasks.length - completedTasks.length;
+    totalTasksCounter.textContent = totalTasks;
+    completedTasksCounter.textContent = completedTasks;
+    pendingTasksCounter.textContent = pendingTasks;
+    
+    // Add animation to counters
+    animateStatistics();
 }
 
-// Check empty state
 function checkEmptyState() {
-    const visibleTasks = Array.from(document.querySelectorAll("#taskList li"))
-        .filter(task => task.style.display !== "none");
+    const visibleTasks = document.querySelectorAll("#taskList li[style='display: block']").length;
     
-    if (visibleTasks.length === 0) {
+    if (visibleTasks === 0) {
+        let message = "No tasks found. Ready to be productive?";
+        
+        if (currentFilter === "active") {
+            message = "No active tasks. All done for now!";
+        } else if (currentFilter === "completed") {
+            message = "No completed tasks yet. Keep going!";
+        } else if (searchInput.value.trim() !== "") {
+            message = "No matching tasks found. Try a different search.";
+        }
+        
+        emptyState.querySelector("p").textContent = message;
         emptyState.style.display = "block";
     } else {
         emptyState.style.display = "none";
     }
 }
 
-// Toggle theme
+function exportTasks() {
+    try {
+        const storedTasks = localStorage.getItem("tasks");
+        if (!storedTasks || JSON.parse(storedTasks).length === 0) {
+            showNotification("No tasks to export!", "warning");
+            return;
+        }
+        
+        const tasks = JSON.parse(storedTasks);
+        const tasksForExport = tasks.map(task => {
+            return {
+                task: task.text,
+                priority: task.priority,
+                status: task.completed ? "Completed" : "Pending",
+                dateAdded: formatDate(new Date(task.dateAdded))
+            };
+        });
+        
+        // Convert to CSV
+        const headers = ["Task", "Priority", "Status", "Date Added"];
+        const csvContent = [
+            headers.join(","),
+            ...tasksForExport.map(row => [
+                `"${row.task.replace(/"/g, '""')}"`,
+                row.priority,
+                row.status,
+                row.dateAdded
+            ].join(","))
+        ].join("\n");
+        
+        // Create download link
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", `goalguru-tasks-${formatDateForFilename(new Date())}.csv`);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        showNotification("Tasks exported successfully!", "success");
+    } catch (error) {
+        console.error("Error exporting tasks:", error);
+        showNotification("Failed to export tasks. Please try again.", "error");
+    }
+}
+
 function toggleTheme() {
     document.body.classList.toggle("dark-mode");
     localStorage.setItem("theme", document.body.classList.contains("dark-mode") ? "dark" : "light");
 }
 
-// Format date
 function formatDate(date) {
-    const options = { month: 'short', day: 'numeric' };
+    const options = { month: 'short', day: 'numeric', year: 'numeric' };
     return date.toLocaleDateString('en-US', options);
+}
+
+function formatDateForFilename(date) {
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}`;
+}
+
+function showNotification(message, type = "info") {
+    // Check if notification container exists, if not create it
+    let notifContainer = document.querySelector(".notification-container");
+    if (!notifContainer) {
+        notifContainer = document.createElement("div");
+        notifContainer.className = "notification-container";
+        document.body.appendChild(notifContainer);
+        
+        // Add styles for notification container
+        const style = document.createElement("style");
+        style.textContent = `
+            .notification-container {
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+            }
+            .notification {
+                padding: 12px 16px;
+                margin-bottom: 10px;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                color: white;
+                font-size: 14px;
+                font-weight: 500;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                min-width: 280px;
+                max-width: 320px;
+                opacity: 0;
+                transform: translateX(50px);
+                animation: slideIn 0.3s forwards, fadeOut 0.5s 2.5s forwards;
+            }
+            .notification.success {
+                background-color: #22c55e;
+            }
+            .notification.error {
+                background-color: #ef4444;
+            }
+            .notification.info {
+                background-color: #3b82f6;
+            }
+            .notification.warning {
+                background-color: #f59e0b;
+            }
+            .close-notification {
+                background: none;
+                border: none;
+                color: white;
+                opacity: 0.7;
+                cursor: pointer;
+                font-size: 16px;
+                padding: 0 0 0 10px;
+                transition: opacity 0.2s;
+            }
+            .close-notification:hover {
+                opacity: 1;
+                background: none;
+                transform: none;
+                box-shadow: none;
+            }
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateX(50px); }
+                to { opacity: 1; transform: translateX(0); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    // Create notification element
+    const notification = document.createElement("div");
+    notification.className = `notification ${type}`;
+    notification.innerHTML = `
+        ${message}
+        <button class="close-notification">×</button>
+    `;
+    
+    // Add to container
+    notifContainer.appendChild(notification);
+    
+    // Add close button functionality
+    notification.querySelector(".close-notification").addEventListener("click", () => {
+        notification.remove();
+    });
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+        if (notification.parentNode) {
+            notification.remove();
+        }
+    }, 3000);
+}
+
+function animateStatistics() {
+    const statBoxes = document.querySelectorAll(".stat-box");
+    statBoxes.forEach((box, index) => {
+        setTimeout(() => {
+            box.style.animation = "none";
+            setTimeout(() => {
+                box.style.animation = "fadeIn 0.5s ease forwards";
+            }, 10);
+        }, index * 100);
+    });
 }
