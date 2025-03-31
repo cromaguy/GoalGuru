@@ -3,16 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GoalGuru 1.0</title>
-    <link rel="shortcut icon" href="https://event.kiit.ac.in/wp-content/uploads/2021/11/KIIT-Logo.png">
+    <title>GoalGuru Enhanced</title> <link rel="shortcut icon" href="https://event.kiit.ac.in/wp-content/uploads/2021/11/KIIT-Logo.png">
     <link rel="stylesheet" href="style.css">
     <script defer src="script.js"></script>
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>GoalGuru</h1>
-            <div class="theme-toggle">
+            <h1>GoalGuru <span class="version-badge">Enhanced</span></h1> <div class="theme-toggle">
                 <span class="light-mode">☀️</span>
                 <label class="switch">
                     <input type="checkbox" id="themeToggle">
@@ -25,11 +23,11 @@
         <div class="task-stats">
             <div class="stat-box">
                 <span id="totalTasks">0</span>
-                <p>Total</p>
+                <p>Total Tasks</p>
             </div>
             <div class="stat-box">
                 <span id="completedTasks">0</span>
-                <p>Done</p>
+                <p>Completed</p>
             </div>
             <div class="stat-box">
                 <span id="pendingTasks">0</span>
@@ -37,57 +35,68 @@
             </div>
         </div>
 
+        <div class="todo-input">
+            <input type="text" id="taskInput" placeholder="Enter a new task...">
+            <select id="prioritySelect">
+                <option value="medium">Medium Priority</option>
+                <option value="high">High Priority</option>
+                <option value="low">Low Priority</option>
+            </select>
+            <button id="addTaskBtn">Add Task</button>
+        </div>
+
         <div class="controls">
-            <div class="todo-input">
-                <input type="text" id="taskInput" placeholder="Add a new task...">
-                <select id="prioritySelect">
-                    <option value="normal">Normal</option>
-                    <option value="high">High</option>
-                    <option value="low">Low</option>
-                </select>
-                <button id="addTaskBtn">Add Task</button>
-            </div>
-            
             <div class="filters">
                 <button id="allTasks" class="filter-btn active">All</button>
                 <button id="activeTasks" class="filter-btn">Active</button>
                 <button id="completedTasksBtn" class="filter-btn">Completed</button>
             </div>
-            
+
             <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Search tasks...">
-            </div>
+                 <input type="text" id="searchInput" placeholder="Search tasks...">
+                 </div>
         </div>
-        
+
         <div class="task-container">
             <ul id="taskList"></ul>
             <div id="emptyState" class="empty-state">
-                <p>No tasks found. Add your first task!</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-coffee"><path d="M18 8h1a4 4 0 0 1 0 8h-1"></path><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"></path><line x1="6" y1="1" x2="6" y2="4"></line><line x1="10" y1="1" x2="10" y2="4"></line><line x1="14" y1="1" x2="14" y2="4"></line></svg>
+                <p>No tasks yet. Add your first one!</p>
             </div>
         </div>
-        
+
         <div class="action-buttons">
             <button id="clearCompletedBtn">Clear Completed</button>
-            <button id="exportTasksBtn">Export Tasks</button>
+            <button id="exportTasksBtn">Export Tasks (CSV)</button>
         </div>
     </div>
-    
-    <!-- Task template for cloning -->
+
     <template id="taskTemplate">
         <li>
             <div class="task-content">
                 <div class="task-main">
-                    <input type="checkbox" class="task-check">
-                    <span class="task-text"></span>
+                    <input type="checkbox" class="task-check" title="Mark as complete/incomplete">
+                    <span class="task-text" title="Click to edit"></span>
                     <span class="priority-badge"></span>
                     <span class="date-added"></span>
                 </div>
                 <div class="task-actions">
-                    <button class="edit" title="Edit">✏️</button>
-                    <button class="delete" title="Delete">❌</button>
+                     <button class="delete" title="Delete">❌</button>
                 </div>
             </div>
         </li>
     </template>
+
+    <div id="confirmationModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <h3 id="modalTitle">Confirm Action</h3>
+            <p id="modalMessage">Are you sure?</p>
+            <div class="modal-actions">
+                <button id="modalConfirmBtn" class="btn-confirm">Confirm</button>
+                <button id="modalCancelBtn" class="btn-cancel">Cancel</button>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>
