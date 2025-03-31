@@ -215,7 +215,7 @@ header {
     align-items: center;
     margin-bottom: 25px;
     padding-bottom: 15px;
-    border-bottom: 1px solid var(--border-light);
+    /* border-bottom: 1px solid var(--border-light); */
 }
 
 body.dark-mode header {
@@ -423,7 +423,7 @@ body.dark-mode .stat-box p {
 }
 
 #prioritySelect {
-    flex-basis: 170px;
+    /* flex-basis: 170px; */
     /* Give select a base width */
     flex-grow: 0;
     cursor: pointer;
