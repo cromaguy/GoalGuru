@@ -1146,60 +1146,65 @@ body.dark-mode .btn-cancel:hover {
     #taskList li {
         border-radius: var(--border-radius-md);
         box-shadow: var(--shadow-sm);
-        /* Lighter shadow but maintain visibility */
     }
 
     .task-content {
         padding: 12px;
         gap: 8px;
+        flex-wrap: nowrap;
+        align-items: center;
     }
 
     .task-main {
-        width: 100%;
-        gap: 10px;
-        flex-wrap: wrap;
-        /* Allow task text and badge to wrap if needed */
+        width: auto;
+        flex-wrap: nowrap;
+        gap: 8px;
+        align-items: center;
     }
 
     .task-check {
         width: 22px;
-        /* Slightly larger for better touch target */
         height: 22px;
+        margin-right: 2px;
     }
 
     .task-text {
         font-size: 15px;
         padding: 4px;
-        width: calc(100% - 40px);
-        /* Give more room for text */
+        width: auto;
+        flex: 1;
+        min-width: 0; /* This ensures text will truncate rather than overflow */
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
     .priority-badge {
-        margin-top: 4px;
+        margin-top: 0;
         font-size: 10px;
-        padding: 3px 8px;
+        padding: 2px 5px;
+        flex-shrink: 0;
     }
-
+    
     /* Show date as inline timestamp under task */
     .date-added {
         display: block;
-        /* Show date on small screens */
-        margin: 4px 0 0 32px;
-        /* Align with task text */
-        width: 100%;
-        text-align: left;
-        font-size: 11px;
+        width: 30%;
+        margin: 3px 0 0 5px;
+        text-align: center;
+        font-size: 10px;
         opacity: 0.7;
+        padding-left: 0;
     }
 
     .task-actions {
-        padding-left: 32px;
-        /* Align with text */
-        margin-top: 6px;
+        padding-left: 0;
+        margin-top: 0;
+        margin-left: 4px;
+        flex-shrink: 0;
     }
 
     .task-actions button {
-        padding: 8px;
+        padding: 5px;
     }
 
     /* Improve action buttons */
