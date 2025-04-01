@@ -338,6 +338,58 @@ body.dark-mode .stat-box p {
     color: var(--text-muted-dark);
 }
 
+body.dark-mode #prioritySelect {
+    color: var(--text-muted-dark);
+    background-color: rgba(238, 242, 255, 0.156);
+    
+}
+
+body.dark-mode #taskInput,
+#prioritySelect {
+    padding: 14px 18px;
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-radius: var(--border-radius-lg);
+    font-size: 15px;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+    color: var(--text-muted-dark);
+    background-color: rgba(238, 242, 255, 0.156);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(30px);
+}
+
+body.dark-mode #taskInput:focus,
+body.dark-mode #prioritySelect:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    transform: translateY(-1px);
+    color: var(--text-light);
+    background-color: rgb(35, 41, 59);
+}
+
+body.dark-mode #searchInput {
+    width: 100%;
+    padding: 12px 18px;
+    border: 1px solid rgba(255, 255, 255, 0);
+    border-radius: var(--border-radius-lg);
+    font-size: 14px;
+    transition: all var(--transition-std);
+    box-shadow: var(--shadow-sm);
+    color: var(--text-muted-dark);
+    background-color: rgba(238, 242, 255, 0.156);
+    backdrop-filter: blur(50px);
+    -webkit-backdrop-filter: blur(30px);
+}
+
+body.dark-mode #searchInput:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
+    transform: translateY(-1px);
+    color: var(--text-light);
+    background-color: rgb(35, 41, 59);
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -365,13 +417,14 @@ body.dark-mode .stat-box p {
 #taskInput,
 #prioritySelect {
     padding: 14px 18px;
-    border: 1px solid var(--card-bg-dark);
+    border: 1px solid rgba(255, 255, 255, 0);
     border-radius: var(--border-radius-lg);
     font-size: 15px;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
-    background-color: rgba(255, 255, 255, 0.089);
+    background-color: rgba(238, 242, 255, 0.7);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(30px);
+    color: var(--text-muted-light);
 }
 
 #taskInput:focus,
@@ -380,6 +433,7 @@ body.dark-mode .stat-box p {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
     transform: translateY(-1px);
+    color: var(--text-dark);
 }
 
 #prioritySelect {
@@ -465,12 +519,12 @@ body.dark-mode .stat-box p {
 #searchInput {
     width: 100%;
     padding: 12px 18px;
-    border: 1px solid var(--border-light);
+    border: 1px solid rgba(255, 255, 255, 0);
     border-radius: var(--border-radius-lg);
     font-size: 14px;
     transition: all var(--transition-std);
     box-shadow: var(--shadow-sm);
-    background-color: rgba(255, 255, 255, 0.089);
+    background-color: rgba(238, 242, 255, 0.7);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(30px);
 }
@@ -480,6 +534,7 @@ body.dark-mode .stat-box p {
     border-color: var(--primary-color);
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
     transform: translateY(-1px);
+    color: var(--text-dark);
 }
 
 .task-container {
