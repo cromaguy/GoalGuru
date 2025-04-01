@@ -17,7 +17,7 @@
     --priority-low-color: #10b981;
     --light-bg: #d9dcff;
     --dark-bg: #0f172a;
-    --card-bg-light: rgba(255, 255, 255, 0.753);
+    --card-bg-light: rgba(255, 255, 255, 0.819);
     --card-bg-dark: rgba(30, 41, 59, 0.851);
     --text-dark: #0f172a;
     --text-light: #f8fafc;
@@ -1059,6 +1059,7 @@ body.dark-mode .btn-cancel:hover {
         border: none;
         box-shadow: none;
         max-width: 100%;
+        background: white;
     }
 
     header {
