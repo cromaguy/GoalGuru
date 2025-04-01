@@ -1280,7 +1280,7 @@ body::before {
 /* Task and Goal Vector Icons */
 .vector-icon {
     position: fixed;
-    opacity: 0.15;
+    opacity: 0.45;
     z-index: -1;
     pointer-events: none;
     transform-origin: center;
@@ -1288,7 +1288,7 @@ body::before {
 }
 
 body.dark-mode .vector-icon {
-    opacity: 0.1;
+    opacity: 0.3;
     filter: brightness(3.7);
 }
 
