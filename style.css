@@ -15,10 +15,10 @@
     --priority-high-color: #ef4444;
     --priority-medium-color: #f59e0b;
     --priority-low-color: #10b981;
-    --light-bg: #f8fafc;
+    --light-bg: #d9dcff;
     --dark-bg: #0f172a;
-    --card-bg-light: rgba(255, 255, 255, 0.7);
-    --card-bg-dark: rgba(30, 41, 59, 0.8);
+    --card-bg-light: rgba(255, 255, 255, 0.753);
+    --card-bg-dark: rgba(30, 41, 59, 0.851);
     --text-dark: #0f172a;
     --text-light: #f8fafc;
     --text-muted-light: #64748b;
@@ -27,8 +27,8 @@
     --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
     --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.06);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    --border-light: rgba(226, 232, 240, 0.7);
-    --border-dark: rgba(51, 65, 85, 0.7);
+    --border-light: rgba(226, 232, 240, 0);
+    --border-dark: rgba(51, 65, 85, 0);
     --border-radius-sm: 0.375rem;
     --border-radius-md: 0.5rem;
     --border-radius-lg: 0.75rem;
@@ -51,7 +51,7 @@
 
 body {
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, var(--light-bg), #e0e7ff);
+    background: linear-gradient(135deg, #5041ff, #cdceff);
     color: var(--text-dark);
     line-height: 1.6;
     transition: background-color var(--transition-std), color var(--transition-std);
@@ -64,7 +64,7 @@ body {
 }
 
 body.dark-mode {
-    background: linear-gradient(135deg, var(--dark-bg), #1e293b);
+    background: linear-gradient(135deg, #20222f, #4b6bea);
     color: var(--text-light);
 }
 
@@ -89,7 +89,7 @@ body.dark-mode input::placeholder {
 
 body.dark-mode #taskList li {
     background-color: rgba(51, 65, 85, 0.7);
-    border-color: #475569;
+    border-color: #47556900;
 }
 
 body.dark-mode #taskList li:hover {
@@ -122,8 +122,10 @@ body.dark-mode .action-buttons button:hover {
 }
 
 body.dark-mode .stat-box {
-    background-color: rgba(37, 48, 67, 0.8); /* Darker background */
-    border-color: #33415500; /* More visible border */
+    background-color: rgba(37, 48, 67, 0.8);
+    /* Darker background */
+    border-color: #33415500;
+    /* More visible border */
 }
 
 body.dark-mode .empty-state {
@@ -137,13 +139,15 @@ body.dark-mode .empty-state svg {
 /* Search box focus state */
 body.dark-mode #searchInput:focus {
     border-color: var(--primary-color);
-    background-color: rgba(30, 41, 59, 0.9); /* Slightly lighter when focused */
+    background-color: rgba(30, 41, 59, 0.9);
+    /* Slightly lighter when focused */
     box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
 }
 
 /* Task text focus for editing */
 body.dark-mode .task-text:focus {
-    background-color: #334155; /* Darker focused background */
+    background-color: #334155;
+    /* Darker focused background */
     outline-color: var(--primary-color);
 }
 
@@ -158,8 +162,8 @@ body.dark-mode .task-text:focus {
     border: 1px solid var(--border-light);
     transition: all var(--transition-std);
     animation: fadeIn 0.5s ease-out;
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: saturate(200%) blur(30px);
+    backdrop-filter: saturate(200%) blur(30px);
 }
 
 @keyframes fadeIn {
@@ -338,21 +342,15 @@ body.dark-mode .stat-box p {
     color: var(--text-muted-dark);
 }
 
-body.dark-mode #prioritySelect {
-    color: var(--text-muted-dark);
-    background-color: rgba(238, 242, 255, 0.156);
-    
-}
-
 body.dark-mode #taskInput,
-#prioritySelect {
+body.dark-mode #prioritySelect {
     padding: 14px 18px;
     border: 1px solid rgba(255, 255, 255, 0);
     border-radius: var(--border-radius-lg);
     font-size: 15px;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
     color: var(--text-muted-dark);
-    background-color: rgba(238, 242, 255, 0.156);
+    background-color: rgba(51, 65, 85, 0.7);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(30px);
 }
@@ -376,7 +374,7 @@ body.dark-mode #searchInput {
     transition: all var(--transition-std);
     box-shadow: var(--shadow-sm);
     color: var(--text-muted-dark);
-    background-color: rgba(238, 242, 255, 0.156);
+    background-color: rgba(51, 65, 85, 0.7);
     backdrop-filter: blur(50px);
     -webkit-backdrop-filter: blur(30px);
 }
@@ -581,7 +579,7 @@ body.dark-mode .task-container::-webkit-scrollbar-thumb {
 #taskList li {
     background-color: rgba(255, 255, 255, 0.6);
     border-radius: var(--border-radius-lg);
-    border: 1px solid var(--border-light);
+    border: 0px solid var(--border-light);
     transition: all var(--transition-std);
     position: relative;
     overflow: hidden;
@@ -619,11 +617,13 @@ body.dark-mode .task-container::-webkit-scrollbar-thumb {
 #taskList li:hover {
     box-shadow: var(--shadow-lg);
     /* transform: translateY(-3px); */
-    border-color: #cbd5e1;
+    border-color: #7088ff;
+    background: #f0f3ff;
 }
 
 body.dark-mode #taskList li:hover {
-    border-color: #475569;
+    border-color: #aaadff;
+    background: #3c405e;
 }
 
 .task-content {
@@ -751,7 +751,7 @@ body.dark-mode .date-added {
     cursor: pointer;
     font-size: 18px;
     padding: 6px;
-    border-radius: 50%;
+    border-radius: 10%;
     line-height: 1;
     transition: all var(--transition-fast);
     display: flex;
@@ -760,12 +760,17 @@ body.dark-mode .date-added {
 }
 
 .task-actions button:hover {
-    background-color: #f1f5f9;
+    border-radius: 10%;
+    background: rgb(255, 255, 255);
     transform: scale(1.1);
 }
 
 body.dark-mode .task-actions button:hover {
-    background-color: #475569;
+    background-color: #2b3139;
+}
+
+body.dark-mode .task-actions button {
+    background: none;
 }
 
 .empty-state {
@@ -822,11 +827,17 @@ body.dark-mode .task-actions button:hover {
 body.dark-mode .action-buttons {
     border-top-color: var(--border-dark);
 }
+body.dark-mode .action-buttons button {
+    background-color: rgba(51, 65, 85, 0.7);
+}
+body.dark-mode .action-buttons button:hover {
+    background-color: rgba(76, 75, 115, 0.7);
+}
 
 .action-buttons button {
     padding: 12px 20px;
     border: 1px solid var(--border-light);
-    background-color: transparent;
+    background-color: white;
     color: var(--primary-color);
     border-radius: var(--border-radius-lg);
     cursor: pointer;
@@ -1173,7 +1184,8 @@ body.dark-mode .btn-cancel:hover {
         padding: 4px;
         width: auto;
         flex: 1;
-        min-width: 0; /* This ensures text will truncate rather than overflow */
+        min-width: 0;
+        /* This ensures text will truncate rather than overflow */
         overflow: hidden;
         text-overflow: ellipsis;
     }
@@ -1184,7 +1196,7 @@ body.dark-mode .btn-cancel:hover {
         padding: 2px 5px;
         flex-shrink: 0;
     }
-    
+
     /* Show date as inline timestamp under task */
     .date-added {
         display: block;
